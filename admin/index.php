@@ -1,3 +1,15 @@
+<?php
+include 'connection.php';
+$sql_count_user = "SELECT COUNT(*) FROM users";
+$sql_count_theloai = "SELECT COUNT(*) FROM theloai";
+$sql_count_tacgia = "SELECT COUNT(*) FROM tacgia";
+$sql_count_baiviet = "SELECT COUNT(*) FROM baiviet";
+$result_count_user = mysqli_query($conn, $sql_count_user);
+$result_count_theloai = mysqli_query($conn, $sql_count_theloai);
+$result_count_tacgia = mysqli_query($conn, $sql_count_tacgia);
+$result_count_baiviet = mysqli_query($conn, $sql_count_baiviet);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -1,3 +1,10 @@
+<?php
+require 'connection.php';
+$sql = "SELECT * FROM theloai";
+$result = mysqli_query($conn, $sql);
+$members = mysqli_fetch_all($result, MYSQLI_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

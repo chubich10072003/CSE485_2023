@@ -67,3 +67,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>
+<?php
+require 'connection.php';
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $ten_tloai = trim($_POST['ten_tloai']);
+    if(empty($ten_tloai)){
+        echo "Vui lòng nhập tên thể loại";
+    }else{
+        $sql = "INSERT INTO theloai(ma_tloai,ten_tloai) VALUES('','$ten_tloai')";
+        $result = mysqli_query($conn,$sql);
+        header("location: category.php");
+    }
+}
+?>
+
+
