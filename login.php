@@ -1,3 +1,30 @@
+<?php
+    if (isset($_POST['username']) && isset($_POST['password'])) {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        try {
+            $conn = new PDO("mysql:host=127.0.0.1;port=3306;dbname=BTTH01_CSE485", username: "root", password: "buithuyngoc2003");
+            $sql = "SELECT * FROM users WHERE username = :username";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+            $stmt->execute();
+            $user  = $stmt->fetch();
+
+
+            if ($user && password_verify($password, $user['password'])) {
+                header('location: index.php');
+                exit();
+
+            } else {
+                echo "<script>alert('Invalid username or password')</script>";
+            }
+        } catch (PDOException $e) {
+            echo "<script>alert('".$e->getMessage()."')</script>";
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,7 +72,6 @@
                 </div>
             </div>
         </nav>
-
     </header>
     <main class="container mt-5 mb-5">
         <!-- <h3 class="text-center text-uppercase mb-3 text-primary">CẢM NHẬN VỀ BÀI HÁT</h3> -->
@@ -60,15 +86,15 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form method="POST">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="txtUser"><i class="fas fa-user"></i></span>
-                            <input type="text" class="form-control" placeholder="username">
+                            <input required type="text" class="form-control" placeholder="username" name="username">
                         </div>
 
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="txtPass"><i class="fas fa-key"></i></span>
-                            <input type="text" class="form-control" placeholder="password">
+                            <input required type="text" class="form-control" placeholder="password" name="password">
                         </div>
 
                         <div class="row align-items-center remember">

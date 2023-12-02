@@ -2,20 +2,20 @@ create database BTTH01_CSE485;
 
 use BTTH01_CSE485;
 
--- Tao bang Tacgia
+-- Tạo bảng Tacgia
 create table tacgia(
 	ma_tgia int unsigned primary key not null,
     ten_tgia varchar(100) not null,
     hinh_tgia varchar(100)
 );
 
--- Tao bang Theloai
+-- Tạo bảng Theloai
 create table theloai(
 	ma_tloai int unsigned not null primary key,
     ten_tloai varchar(50) not null
 );
 
--- Tao bang Baiviet
+-- Tạo bảng Baiviet
 create table baiviet(
 	ma_bviet int unsigned not null primary key,
     tieude varchar(200) not null,
@@ -30,7 +30,7 @@ create table baiviet(
     foreign key (ma_tgia) references tacgia(ma_tgia)
 );
 
--- Them du lieu vao Tacgia
+-- Thêm dữ liệu vào Tacgia
 
 INSERT INTO tacgia (ma_tgia, ten_tgia) VALUES (1, "Nhacvietplus");
 INSERT INTO tacgia (ma_tgia, ten_tgia) VALUES (2, "Sưu tầm");
@@ -41,7 +41,7 @@ INSERT INTO tacgia (ma_tgia, ten_tgia) VALUES (6, "Night Stalker");
 INSERT INTO tacgia (ma_tgia, ten_tgia) VALUES (7, "Phạm Phương Anh");
 INSERT INTO tacgia (ma_tgia, ten_tgia) VALUES (8, "Tâm tình");
 
--- Them du lieu vao The loai
+-- Thêm dữ liệu vào The loai
 
 INSERT INTO theloai VALUE (1, "Nhạc trẻ");
 INSERT INTO theloai VALUE (2, "Nhạc trữ tình");
@@ -52,7 +52,7 @@ INSERT INTO theloai VALUE (6, "POP");
 INSERT INTO theloai VALUE (7, "Rock");
 INSERT INTO theloai VALUE (8, "R&B");
 
--- Them du lieu vao Baiviet
+-- Thêm dữ liệu vào Baiviet
 
 INSERT INTO baiviet (ma_bviet, tieude, ten_bhat, ma_tloai, tomtat, ma_tgia, ngayviet)
 VALUES (
