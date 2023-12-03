@@ -1,10 +1,3 @@
-<?php
-require 'connection.php';
-$sql = "SELECT * FROM tacgia";
-$result = mysqli_query($conn, $sql);
-$members = mysqli_fetch_all($result, MYSQLI_ASSOC);
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,46 +44,34 @@ $members = mysqli_fetch_all($result, MYSQLI_ASSOC);
                             <a class="nav-link" href="article.php">Bài viết</a>
                         </li>
                     </ul>
-                </div>
-            </div>
         </nav>
 
     </header>
     <main class="container mt-5 mb-5">
         <!-- <h3 class="text-center text-uppercase mb-3 text-primary">CẢM NHẬN VỀ BÀI HÁT</h3> -->
-        <div class="row">
-            <div class="col-sm">
-                <a href="add_author.php" class="btn btn-success">Thêm mới</a>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Tên tác giả</th>
-                            <th scope="col">Hình ảnh</th>
-                            <th>Sửa</th>
-                            <th>Xóa</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($members as $member): ?>
-                        <tr>
-                            <th scope="row"><?php echo $member['ma_tgia'] ?></th>
-                            <td><?php echo $member['ten_tgia'] ?></td>
-                            <?php if ($member['hinh_tgia'] == ''): ?>
-                            <td><img src="../images/author/default.jpg" alt="" width="100px"></td>
-                            <?php else: ?>
-                            <td><img src="images/author/<?php echo $member['hinh_tgia'] ?>" alt="" width="100px"></td>
-                            <?php endif; ?>
-                            <td><a href="edit_author.php?id=<?php echo $member['ma_tgia'] ?>" class="btn btn-primary"><i
-                                        class="fas fa-edit"></i></a></td>
-                            <td><a href="delete_author.php?id=<?php echo $member['ma_tgia'] ?>"
-                                    class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+
+        <form action="add_author.php" method=POST>
+            <div class="row">
+                <div class="col-sm">
+                    <h3 class="text-center text-uppercase fw-bold">Thêm tác giả mới</h3>
+                    <form action="process_add_category.php" method="post">
+                        <div class="input-group mt-3 mb-3">
+                            <span class="input-group-text" id="lblCatName">Tên tác giả</span>
+                            <input type="text" class="form-control" name="ten_tgia">
+                        </div>
+                        <div class="input-group mt-3 mb-3">
+                            <span class="input-group-text" id="lblCatName">Hình ảnh</span>
+                            <input type="text" class="form-control" name="hinh_tgia">
+                        </div>
+                        <div class="form-group  float-end ">
+                            <input type="submit" value="Thêm" class="btn btn-success">
+                            <a href="category.php" class="btn btn-warning ">Quay lại</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        </form>
+
     </main>
     <footer class="bg-white d-flex justify-content-center align-items-center border-top border-secondary  border-2"
         style="height:80px">
@@ -101,4 +82,19 @@ $members = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </script>
 </body>
 
+
 </html>
+<?php
+require "connection.php";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $ten_tgia = trim($_POST["ten_tgia"]);
+    $hinh_tgia = trim($_POST["hinh_tgia"]);
+    if (empty($ten_tgia)) {
+        echo "Vui lòng nhập tên tác giả";
+    } else {
+        $sql = "INSERT INTO tacgia(ma_tgia,ten_tgia,hinh_tgia) VALUES('','$ten_tgia','$hinh_tgia')";
+        $result = mysqli_query($conn, $sql);
+        header("location:author.php");
+    }
+}
+?>

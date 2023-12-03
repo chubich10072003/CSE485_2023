@@ -1,10 +1,12 @@
 <?php
 require 'connection.php';
-$sql = "SELECT * FROM tacgia";
-$result = mysqli_query($conn, $sql);
-$members = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$id = $_GET['id'];
+$sql_ten_tgia = "SELECT tacgia FROM tacgia WHERE ma_tgia = $id";
+$stmt_ten_tloai = $pdo->prepare($sql_ten_tloai);
+$stmt_ten_tloai->execute();
+$ten_tloai = $stmt_ten_tloai->fetchColumn();
+$sql_update = "UPDATE theloai SET ten_tloai = ten_tloai WHERE ma_tloai = $id";
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,10 +44,10 @@ $members = mysqli_fetch_all($result, MYSQLI_ASSOC);
                             <a class="nav-link" href="../index.php">Trang ngoài</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="category.php">Thể loại</a>
+                            <a class="nav-link active fw-bold" href="category.php">Thể loại</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active fw-bold" href="author.php">Tác giả</a>
+                            <a class="nav-link" href="author.php">Tác giả</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="article.php">Bài viết</a>
@@ -57,38 +59,29 @@ $members = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
     </header>
     <main class="container mt-5 mb-5">
-        <!-- <h3 class="text-center text-uppercase mb-3 text-primary">CẢM NHẬN VỀ BÀI HÁT</h3> -->
         <div class="row">
             <div class="col-sm">
-                <a href="add_author.php" class="btn btn-success">Thêm mới</a>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Tên tác giả</th>
-                            <th scope="col">Hình ảnh</th>
-                            <th>Sửa</th>
-                            <th>Xóa</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($members as $member): ?>
-                        <tr>
-                            <th scope="row"><?php echo $member['ma_tgia'] ?></th>
-                            <td><?php echo $member['ten_tgia'] ?></td>
-                            <?php if ($member['hinh_tgia'] == ''): ?>
-                            <td><img src="../images/author/default.jpg" alt="" width="100px"></td>
-                            <?php else: ?>
-                            <td><img src="images/author/<?php echo $member['hinh_tgia'] ?>" alt="" width="100px"></td>
-                            <?php endif; ?>
-                            <td><a href="edit_author.php?id=<?php echo $member['ma_tgia'] ?>" class="btn btn-primary"><i
-                                        class="fas fa-edit"></i></a></td>
-                            <td><a href="delete_author.php?id=<?php echo $member['ma_tgia'] ?>"
-                                    class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                <h3 class="text-center text-uppercase fw-bold">Sửa thông tin tác giả</h3>
+                <form action="edit_category.php" method="post">
+                    <div class="input-group mt-3 mb-3">
+                        <span class="input-group-text" id="lblCatId">Mã tác giả</span>
+                        <input type="text" class="form-control" name="txtCatId" readonly value="<?php echo $_GET['id']; 
+                        ?>">
+                    </div>
+
+                    <div class="input-group mt-3 mb-3">
+                        <span class="input-group-text" id="lblCatName">Tên tác giả</span>
+                        <input type="text" class="form-control" name="txtCatName" value="<?php echo $ten_tloai ?>">
+                    </div>
+                    <div class="input-group mt-3 mb-3">
+                        <span class="input-group-text" id="lblCatName">Hình ảnh</span>
+                        <input type="text" class="form-control" name="txtCatName" value="<?php echo $ten_tloai ?>">
+                    </div>
+                    <div class="form-group  float-end ">
+                        <input type="submit" value="Lưu lại" class="btn btn-success">
+                        <a href="category.php" class="btn btn-warning ">Quay lại</a>
+                    </div>
+                </form>
             </div>
         </div>
     </main>
@@ -102,3 +95,12 @@ $members = mysqli_fetch_all($result, MYSQLI_ASSOC);
 </body>
 
 </html>
+<?php
+if (isset($_POST['txtCatName'])) {
+    $ten_tloai = $_POST['txtCatName'];
+    $sql_update = "UPDATE theloai SET ten_tloai = '$ten_tloai' WHERE ma_tloai = $id";
+    $stmt_update = $pdo->prepare($sql_update);
+    $stmt_update->execute();
+    header('location: author.php');
+}
+?>
