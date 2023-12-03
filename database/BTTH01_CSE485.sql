@@ -2,22 +2,21 @@
 
 -- use BTTH01_CSE485;
 
--- Tạo bảng Tacgia
+-- Tao bang Tacgia
 create table tacgia(
-	ma_tgia int unsigned primary key not null,
+	ma_tgia int unsigned primary key not null auto_increment,
     ten_tgia varchar(100) not null,
     hinh_tgia varchar(100)
 );
-
--- Tạo bảng Theloai
+-- Tao bang Theloai
 create table theloai(
-	ma_tloai int unsigned not null primary key,
+	ma_tloai int unsigned not null primary key auto_increment,
     ten_tloai varchar(50) not null
 );
 
--- Tạo bảng Baiviet
+-- Tao bang Baiviet
 create table baiviet(
-	ma_bviet int unsigned not null primary key,
+	ma_bviet int unsigned not null primary key auto_increment,
     tieude varchar(200) not null,
     ten_bhat varchar(100) not null,
     ma_tloai int unsigned not null,

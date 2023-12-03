@@ -1,12 +1,12 @@
 <?php
+require 'admin/connection.php';
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
     try {
-        $conn = new PDO("mysql:host=localhost;port=3000;dbname=BTTH01_CSE485", username: "root", password: "");
         $sql = "SELECT * FROM users WHERE username = :username";
-        $stmt = $conn->prepare($sql);
+        $stmt = $connPDO->prepare($sql);
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         $stmt->execute();
         $user  = $stmt->fetch();
@@ -110,9 +110,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
         </div>
     </main>
-    <footer class="bg-white d-flex justify-content-center align-items-center border-top border-secondary  border-2" style="height:80px">
-        <h4 class="text-center text-uppercase fw-bold">TLU's music garden</h4>
-    </footer>
+    <?php include 'footer.php'?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
     </script>
 </body>
