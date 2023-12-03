@@ -28,10 +28,37 @@ LIMIT 2
 SELECT baiviet.ma_bviet, baiviet.ten_bhat, tacgia.ten_tgia, baiviet.ngayviet, baiviet.hinhanh, baiviet.tomtat, baiviet.noidung, baiviet.ma_tloai FROM baiviet,tacgia WHERE baiviet.ten_bhat LIKE '%yêu%' OR baiviet.ten_bhat LIKE '%thương%' OR baiviet.ten_bhat LIKE '%anh%' OR baiviet.ten_bhat LIKE '%em%';
 
 -- i,Tạo 1 view có tên vw_Music để hiển thị thông tin về Danh sách các bài viết kèm theo Tên  thể loại và tên tác giả
+CREATE VIEW vw_Music AS
+SELECT
+    bv.ma_bviet,
+    bv.tieude,
+    bv.ten_bhat,
+    tl.ten_tloai AS ten_the_loai,
+    tg.ten_tgia AS ten_tac_gia
+FROM
+    baiviet bv
+    JOIN theloai tl ON bv.ma_tloai = tl.ma_tloai
+    JOIN tacgia tg ON bv.ma_tgia = tg.ma_tgia;
+-- Xem view
+SELECT * FROM vw_Music
 
 -- j, Tạo 1 thủ tục có tên sp_DSBaiViet với tham số truyền vào là Tên thể loại và trả về danh sách Bài viết của thể loại đó. Nếu thể loại không tồn tại thì hiển thị thông báo lỗi.
 
 -- k, Thêm mới cột SLBaiViet vào trong bảng theloai. Tạo 1 trigger có tên tg_CapNhatTheLoai để khi thêm/sửa/xóa bài viết thì số lượng bài viết trong bảng theloai được cập nhật theo.
+-- Thêm mới cột SLBaiViet
+ALTER TABLE theloai ADD COLUMN SLBaiViet INT DEFAULT 0;
+
+DELIMITER //
+CREATE TRIGGER tg_CapNhatTheLoai
+AFTER INSERT ON baiviet
+FOR EACH ROW
+BEGIN
+    -- Tăng số lượng bài viết trong thể loại khi 1 bài viết mới được thêm
+    UPDATE theloai
+    SET SLBaiViet = SLBaiViet + 1
+    WHERE ma_tloai = NEW.ma_tloai;
+END //
+DELIMITER ;
 
 -- Bổ sung thêm bảng Users để lưu thông tin Tài khoản đăng nhập và sử dụng cho chức năng Đăng nhập/Quản trị trang web.
 CREATE TABLE users (
