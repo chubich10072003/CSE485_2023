@@ -1,6 +1,6 @@
-create database BTTH01_CSE485;
+-- create database BTTH01_CSE485;
 
-use BTTH01_CSE485;
+-- use BTTH01_CSE485;
 
 -- Tạo bảng Tacgia
 create table tacgia(
