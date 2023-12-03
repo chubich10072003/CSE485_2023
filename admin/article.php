@@ -1,6 +1,6 @@
 <?php
 require "connection.php";
-$sql       = "SELECT * FROM baiviet";
+$sql       = "SELECT * FROM baiviet order by ngayviet desc";
 $result = mysqli_query($conn, $sql);
 $members = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>

@@ -1,3 +1,34 @@
+<?php
+$check = false;
+require 'connection.php';
+
+$result = mysqli_query($conn, "SELECT * FROM theloai");
+$types = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+$result = mysqli_query($conn, "SELECT * FROM tacgia");
+$authors = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+if (isset($_POST['tieude']) && isset($_POST['ten_bhat']) && isset($_POST['ten_tloai'])  && isset($_POST['tomtat']) && isset($_POST['noidung']) && isset($_POST['ten_tgia']) && isset($_POST['ngayviet'])) {
+    $tieude = $_POST['tieude'];
+    $ten_bhat = $_POST['ten_bhat'];
+    $ten_tloai = $_POST['ten_tloai'];
+    $tomtat = $_POST['tomtat'];
+    $noidung = $_POST['noidung'];
+    $ten_tgia = $_POST['ten_tgia'];
+    $ngayviet = $_POST['ngayviet'];
+    $hinhanh = $_POST['hinhanh'];
+    $sql = "INSERT INTO baiviet (tieude, ten_bhat, ma_tloai, tomtat, noidung, ma_tgia, ngayviet, hinhanh) VALUES ('$tieude', '$ten_bhat', '$ten_tloai', '$tomtat', '$noidung', '$ten_tgia', '$ngayviet', '$hinhanh')";
+    $result = mysqli_query($conn, $sql);
+    $check = true;
+    if ($check) {
+        echo "<script>alert('Thêm thành công')</script>";
+        header('location: article.php');
+    } else {
+        echo "<script>alert('Thêm thất bại')</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,11 +78,10 @@
 
     </header>
     <main class="container mt-5 mb-5">
-        <form action="" method=POST>
+        <form method="post">
             <div class="row">
                 <div class="col-sm">
                     <h3 class="text-center text-uppercase fw-bold">Thêm bài viết mới</h3>
-                    <form action="process_add_category.php" method="post">
                         <div class="input-group mt-3 mb-3">
                             <span class="input-group-text" id="tieude">Tiêu đề</span>
                             <input type="text" class="form-control" name="tieude">
@@ -63,7 +93,14 @@
                         <div class="input-group mt-3 mb-3">
                             <span class="input-group-text">Tên thể loại</span>
                             <select id='ten_tloai' style="width:250px" name="ten_tloai">
-                                <option value='0'>Chọn tên thể loại</option>
+                                <option value='-1'>Chọn tên thể loại</option>
+                                <?php
+                                    foreach ($types as $type) {
+                                ?>
+                                    <option value="<?= $type['ma_tloai'] ?>"><?= $type['ten_tloai'] ?></option>
+                                <?php
+                                    };
+                                ?>
                             </select>
                         </div>
                         <div class="input-group mt-3 mb-3">
@@ -77,7 +114,14 @@
                         <div class="input-group mt-3 mb-3">
                             <span class="input-group-text">Tên tác giả</span>
                             <select id='ten_tgia' style="width:250px" name="ten_tgia">
-                                <option value='0'>Chọn tên tác giả</option>
+                                <option value='-1'>Chọn tên tác giả</option>
+                                <?php
+                                    foreach ($authors as $author) {
+                                ?>
+                                    <option value="<?= $author['ma_tgia'] ?>"><?= $author['ten_tgia'] ?></option>
+                                <?php
+                                    };
+                                ?>
                             </select>
                         </div>
                         <div class="input-group mt-3 mb-3">
@@ -92,7 +136,6 @@
                             <input type="submit" value="Thêm" class="btn btn-success">
                             <a href="category.php" class="btn btn-warning ">Quay lại</a>
                         </div>
-                    </form>
                 </div>
             </div>
         </form>
@@ -101,82 +144,7 @@
     <footer class="bg-white d-flex justify-content-center align-items-center border-top border-secondary  border-2" style="height:80px">
         <h4 class="text-center text-uppercase fw-bold">TLU's music garden</h4>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    $(document).ready(function() {
-
-        $("#ten_tgia").select2({
-            ajax: {
-                url: "get_ten_tgia.php",
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        searchTerm: params.term // search term
-                    };
-                },
-                processResults: function(response) {
-                    return {
-                        results: response
-                    };
-                },
-                cache: true
-            }
-        });
-        $("#ten_tloai").select2({
-            ajax: {
-                url: "get_ten_tloai.php",
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        searchTerm: params.term // search term
-                    };
-                },
-                processResults: function(response) {
-                    return {
-                        results: response
-                    };
-                },
-                cache: true
-            }
-        });
-        window.addEventListener("load", function() {
-            var now = new Date();
-            var offset = now.getTimezoneOffset() * 60000;
-            var adjustedDate = new Date(now.getTime() - offset);
-            var formattedDate = adjustedDate.toISOString().substring(0, 16); // For minute precision
-            var datetimeField = document.getElementById("myDatetimeField");
-            datetimeField.value = formattedDate;
-        });
-
-    });
-</script>
-
 </html>
-<?php
-$check = false;
-require 'connection.php';
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['tieude']) && isset($_POST['ten_bhat']) && isset($_POST['ten_tloai']) && isset($_POST['tomtat']) && isset($_POST['noidung']) && isset($_POST['ten_tgia']) && isset($_POST['ngayviet'])) {
-    $tieude = $_POST['tieude'];
-    $ten_bhat = $_POST['ten_bhat'];
-    $ten_tloai = $_POST['ten_tloai'];
-    $tomtat = $_POST['tomtat'];
-    $noidung = $_POST['noidung'];
-    $ten_tgia = $_POST['ten_tgia'];
-    $ngayviet = $_POST['ngayviet'];
-    $hinhanh = $_POST['hinhanh'];
-    $sql = "INSERT INTO baiviet (ma_bviet,tieude, ten_bhat, ma_tloai, tomtat, noidung, ma_tgia, ngayviet, hinhanh) VALUES ('','$tieude', '$ten_bhat', '$ten_tloai', '$tomtat', '$noidung', '$ten_tgia', '$ngayviet', '$hinhanh')";
-    $result = mysqli_query($conn, $sql);
-    $check = true;
-    if ($check) {
-        echo "<script>alert('Thêm thành công')</script>";
-    } else {
-        echo "<script>alert('Thêm thất bại')</script>";
-    }
-}
-?>
