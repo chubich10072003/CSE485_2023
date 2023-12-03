@@ -1,8 +1,9 @@
 <?php
 require 'connection.php';
-$sql = "SELECT * FROM theloai";
+$sql    = "SELECT * FROM theloai";
 $result = mysqli_query($conn, $sql);
-$members = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -64,27 +65,24 @@ $members = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
+                        <?php
+                            $index = 1;
+                            foreach($categories as $cate) {
+                        ?>
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Nhạc trữ tình</td>
+                            <th scope="row"><?= $index?></th>
+                            <td><?= $cate['ten_tloai'] ?></td>
                             <td>
-                                <a href="edit_category.php?id=1"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a href="edit_category.php?id=<?= $cate['ma_tloai'] ?>"><i class="fa-solid fa-pen-to-square"></i></a>
                             </td>
                             <td>
-                                <a href=""><i class="fa-solid fa-trash"></i></a>
+                                <a href="delete_category.php?id=<?php echo $cate['ma_tloai'] ?>"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Nhạc cách mạng</td>
-                            <td>
-                                <a href="edit_category.php?id=2"><i class="fa-solid fa-pen-to-square"></i></a>
-                            </td>
-                            <td>
-                                <a href=""><i class="fa-solid fa-trash"></i></a>
-                            </td>
-                        </tr>
-                       
+                        <?php
+                            $index = $index+1;
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>

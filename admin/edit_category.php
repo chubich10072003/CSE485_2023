@@ -1,11 +1,13 @@
 <?php
 require 'connection.php';
 $id = $_GET['id'];
+
 $sql_ten_tloai = "SELECT ten_tloai FROM theloai WHERE ma_tloai = $id";
+
 $stmt_ten_tloai = $pdo->prepare($sql_ten_tloai);
 $stmt_ten_tloai->execute();
 $ten_tloai = $stmt_ten_tloai->fetchColumn();
-$sql_update = "UPDATE theloai SET ten_tloai = ten_tloai WHERE ma_tloai = $id";
+
 if (isset($_POST['txtCatName'])) {
     $ten_tloai = $_POST['txtCatName'];
     $sql_update = "UPDATE theloai SET ten_tloai = '$ten_tloai' WHERE ma_tloai = $id";
