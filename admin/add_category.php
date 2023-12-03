@@ -47,10 +47,10 @@
         <div class="row">
             <div class="col-sm">
                 <h3 class="text-center text-uppercase fw-bold">Thêm mới thể loại</h3>
-                <form action="process_add_category.php" method="post">
+                <form method="post">
                     <div class="input-group mt-3 mb-3">
                         <span class="input-group-text" id="lblCatName">Tên thể loại</span>
-                        <input type="text" class="form-control" name="txtCatName" >
+                        <input type="text" class="form-control" name="ten_tloai" >
                     </div>
 
                     <div class="form-group  float-end ">
@@ -67,3 +67,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>
+<?php
+require 'connection.php';
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $ten_tloai = trim($_POST['ten_tloai']);
+    if(empty($ten_tloai)){
+        echo "Vui lòng nhập tên thể loại";
+    }else{
+        $sql = "INSERT INTO theloai(ten_tloai) VALUES('$ten_tloai')";
+        $result = mysqli_query($conn,$sql);
+        header("location: category.php");
+    }
+}
+?>
+
+
